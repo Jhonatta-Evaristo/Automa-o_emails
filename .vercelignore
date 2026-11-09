@@ -1,0 +1,8 @@
+.venv
+__pycache__
+.pytest_cache
+tests
+testar_pdfs_reais.py
+destinatarios.csv
+*.pdf
+.env*
