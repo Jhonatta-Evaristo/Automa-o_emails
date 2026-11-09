@@ -109,3 +109,7 @@ def send_email(payload:SendRequest,user=Depends(auth)):
   raise HTTPException(502,'Não foi possível confirmar envio. Consulte o serviço de e-mail antes de tentar novamente.')
  logging.info('Envio solicitado por %s; sha256=%s; tipo=%s',user.username,record['sha256'],record['kind'])
  return {'sent':True,'message':'Servidor SMTP confirmou a aceitação do e-mail para envio.'}
+
+# Validação de pastas por empresa: sem envio real e sem tokens de envio.
+from .batch_routes import get_router
+app.include_router(get_router(auth, authorized))

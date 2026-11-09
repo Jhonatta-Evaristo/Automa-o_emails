@@ -1,6 +1,12 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GCF — Envio de Documentos</title><style>
-:root{font-family:Arial,Helvetica,sans-serif;color:#142742;background:#f3f7fb}*{box-sizing:border-box}body{margin:0}header{background:#0b2143;color:white;padding:20px max(24px,calc((100vw - 950px)/2));border-bottom:5px solid #049de9}header strong{font-size:23px}header .brand{display:flex;align-items:center;gap:12px}header img{width:64px;height:64px;object-fit:contain;border-radius:12px;background:white}header small{display:block;color:#b9d5ef;margin-top:5px}.wrap{max-width:950px;margin:32px auto;padding:0 18px}h1{font-size:25px;margin:0 0 23px}.card{background:white;border:1px solid #e2e9f2;border-radius:16px;padding:28px;box-shadow:0 5px 22px #14345610}label{display:block;font-weight:700;margin:15px 0 8px}input,select{width:100%;padding:14px;border:1px solid #b7c9dd;border-radius:9px;font-size:15px;background:#fff;color:#172b45}input:focus,select:focus{outline:2px solid #009dea}.radios{display:flex;gap:18px;flex-wrap:wrap}.radio{padding:12px 17px;border-radius:9px;background:#f2f8fd;font-weight:500;cursor:pointer}.radio input{width:auto;accent-color:#048fea}.upload{border:2px dashed #58aff1;padding:25px;text-align:center;border-radius:10px;background:#f5fbff}button{border:0;border-radius:9px;padding:14px 18px;font-size:15px;font-weight:700;cursor:pointer;background:#068ee4;color:white}button:disabled{background:#cbd6e1;color:#728194;cursor:not-allowed}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.result{display:none;margin-top:22px;padding:18px;border-radius:10px;background:#f5f8fb;border:1px solid #d3dce9}.result.ok{display:block;background:#eaf9f0;border-color:#9bd4af}.result.bad{display:block;background:#fff1f1;border-color:#e4a6a6}.result p{margin:8px 0}.result ul{margin:10px 0 0;padding-left:19px}footer{margin-top:20px;color:#748398;font-size:12px;text-align:center}@media(max-width:600px){.card{padding:18px}.actions button{width:100%}header{padding:19px}}
-</style></head><body><header><div class="brand"><img src="/logo.png" alt="Logo Grupo Conceito Fiscal"><div><strong>GRUPO CONCEITO FISCAL</strong><small>Validação e envio de documentos</small></div></div></header><main class="wrap"><h1>Envio de documentos</h1><div class="card"><form id="form"><label for="email">E-mail da empresa</label><input id="email" type="email" autocomplete="off" required placeholder="contato@empresa.com.br"><label>Categoria</label><div class="radios"><label class="radio"><input type="radio" name="cat" value="simples" checked> Simples Nacional</label><label class="radio"><input type="radio" name="cat" value="normal"> Lucro Normal</label></div><label for="kind">Tipo de documento</label><select id="kind" required></select><label for="pdf">Anexar documento (PDF)</label><div class="upload"><input type="file" id="pdf" accept="application/pdf,.pdf" required><small>Máximo 12 MB • o arquivo é analisado antes de ser enviado</small></div><div class="actions"><button id="validate" type="submit">Validar documento</button><button id="send" type="button" disabled>Enviar e-mail</button></div></form><section id="result" class="result" role="status" aria-live="polite"></section></div><footer>Uso interno GCF • Nenhum documento é enviado antes da validação</footer></main><script>
+:root{font-family:Arial,Helvetica,sans-serif;color:#142742;background:#f3f7fb}*{box-sizing:border-box}body{margin:0}header{background:#0b2143;color:white;padding:20px max(24px,calc((100vw - 950px)/2));border-bottom:5px solid #049de9}header strong{font-size:23px}header .brand{display:flex;align-items:center;gap:12px}header img{width:64px;height:64px;object-fit:contain;border-radius:12px;background:white}header small{display:block;color:#b9d5ef;margin-top:5px}.wrap{max-width:950px;margin:32px auto;padding:0 18px}h1{font-size:25px;margin:0 0 23px}.card{background:white;border:1px solid #e2e9f2;border-radius:16px;padding:28px;box-shadow:0 5px 22px #14345610}label{display:block;font-weight:700;margin:15px 0 8px}input,select{width:100%;padding:14px;border:1px solid #b7c9dd;border-radius:9px;font-size:15px;background:#fff;color:#172b45}input:focus,select:focus{outline:2px solid #009dea}.radios{display:flex;gap:18px;flex-wrap:wrap}.radio{padding:12px 17px;border-radius:9px;background:#f2f8fd;font-weight:500;cursor:pointer}.radio input{width:auto;accent-color:#048fea}.upload{border:2px dashed #58aff1;padding:25px;text-align:center;border-radius:10px;background:#f5fbff}button{border:0;border-radius:9px;padding:14px 18px;font-size:15px;font-weight:700;cursor:pointer;background:#068ee4;color:white}button:disabled{background:#cbd6e1;color:#728194;cursor:not-allowed}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.result{display:none;margin-top:22px;padding:18px;border-radius:10px;background:#f5f8fb;border:1px solid #d3dce9}.result.ok{display:block;background:#eaf9f0;border-color:#9bd4af}.result.bad{display:block;background:#fff1f1;border-color:#e4a6a6}.result p{margin:8px 0}.result ul{margin:10px 0 0;padding-left:19px}.tabs{display:flex;gap:10px;margin-bottom:20px}.tabs button{background:#e9f3fb;color:#0b2143}.tabs button.selected{background:#068ee4;color:white}.batch-company{border:1px solid #d6e3ee;padding:17px;border-radius:12px;margin:14px 0;background:#fbfdff}.batch-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.batch-head h3{margin:0}.secondary{background:#e8f2fb;color:#0b2143}.tiny{font-size:13px;color:#61748c}.batch-result{white-space:normal;margin-top:12px;padding:12px;border-radius:8px;background:#eef3f8}.batch-result.ok{background:#e7f7ee}.batch-result.bad{background:#fff0f0}.batch-result ul{margin:8px 0 0;padding-left:18px}.batch-result li{margin:5px 0}.notice{background:#edf5fd;border:1px solid #bcd9ee;padding:13px;border-radius:9px;margin-bottom:16px}.hidden{display:none!important}.batch-totals{font-weight:700;margin-top:15px}footer{margin-top:20px;color:#748398;font-size:12px;text-align:center}@media(max-width:600px){.card{padding:18px}.actions button{width:100%}header{padding:19px}}
+</style></head><body><header><div class="brand"><img src="/logo.png" alt="Logo Grupo Conceito Fiscal"><div><strong>GRUPO CONCEITO FISCAL</strong><small>Validação e envio de documentos</small></div></div></header><main class="wrap"><h1>Envio de documentos</h1><div class="tabs"><button id="individualTab" class="selected" type="button">Individual</button><button id="batchTab" type="button">Em lote</button></div><div class="card" id="individualPane"><form id="form"><label for="email">E-mail da empresa</label><input id="email" type="email" autocomplete="off" required placeholder="contato@empresa.com.br"><label>Categoria</label><div class="radios"><label class="radio"><input type="radio" name="cat" value="simples" checked> Simples Nacional</label><label class="radio"><input type="radio" name="cat" value="normal"> Lucro Normal</label></div><label for="kind">Tipo de documento</label><select id="kind" required></select><label for="pdf">Anexar documento (PDF)</label><div class="upload"><input type="file" id="pdf" accept="application/pdf,.pdf" required><small>Máximo 12 MB • o arquivo é analisado antes de ser enviado</small></div><div class="actions"><button id="validate" type="submit">Validar documento</button><button id="send" type="button" disabled>Enviar e-mail</button></div></form><section id="result" class="result" role="status" aria-live="polite"></section></div><div class="card hidden" id="batchPane">
+<div class="notice"><strong>Validação em lote — sem envio real.</strong><p class="tiny">Adicione cada empresa com seu e-mail e PDFs; ou selecione uma pasta principal com uma subpasta por empresa. Os e-mails precisam estar autorizados no cadastro privado por CNPJ. Limite de teste: 4 MB e 12 arquivos por empresa.</p></div>
+<div class="actions"><button class="secondary" id="addCompany" type="button">+ Adicionar empresa</button><button class="secondary" id="folderButton" type="button">Selecionar pasta principal</button><input class="hidden" type="file" id="folderInput" webkitdirectory directory multiple accept=".pdf,application/pdf"></div>
+<div id="batchCompanies"></div>
+<div class="actions"><button id="validateBatch" type="button">Validar lote</button><button type="button" id="sendBatch" disabled>Enviar empresas aprovadas (indisponível)</button></div>
+<section id="batchSummary" class="result" aria-live="polite"></section>
+</div><footer>Uso interno GCF • Nenhum documento é enviado antes da validação</footer></main><script>
 const types={simples:[['declaracao','Declaração Simples Nacional'],['extrato','Extrato Simples Nacional'],['das','Guia DAS Simples Nacional'],['recibo_simples','Recibo Simples Nacional']],normal:[['dare','Guia DARE'],['sped_contrib','Recibo SPED Contribuições'],['sped_fiscal','Recibo SPED Fiscal']]};
 const $=id=>document.getElementById(id);let token=null;let revision=0;const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function clear(){revision++;token=null;$('send').disabled=true;$('result').className='result';$('result').textContent='';}
@@ -9,4 +15,77 @@ function refill(){let sel=$('kind');sel.innerHTML='';for(let [key,label] of type
 document.querySelectorAll('[name=cat]').forEach(e=>e.addEventListener('change',refill));['email','kind','pdf'].forEach(id=>$(id).addEventListener('change',clear));$('email').addEventListener('input',clear);refill();
 $('form').addEventListener('submit',async ev=>{ev.preventDefault();clear();const submittedRevision=revision;let btn=$('validate');btn.disabled=true;btn.textContent='Validando...';try{let fd=new FormData();fd.append('email',$('email').value);fd.append('category',category());fd.append('kind',$('kind').value);fd.append('document',$('pdf').files[0]);let res=await fetch('/api/validate',{method:'POST',body:fd});let data=await res.json();if(submittedRevision!==revision)return;if(!res.ok)throw Error(data.detail||'Erro de validação');let html=`<strong>${data.approved?'✓ Documento aprovado':'✕ Envio bloqueado'}</strong><p>Tipo identificado: ${escapeHtml(data.detected_label||'Não identificado')}</p><p>Categoria: ${escapeHtml(data.category_label||'Não identificada')}</p><p>CNPJ: ${escapeHtml(data.cnpj||'Não identificado')}</p><p>Competência: ${escapeHtml(data.competence||'Não identificada')}</p>`;if(data.reasons?.length)html+=`<ul>${data.reasons.map(r=>'<li>'+escapeHtml(r)+'</li>').join('')}</ul>`;$('result').innerHTML=html;$('result').className='result '+(data.approved?'ok':'bad');if(data.approved && data.token){token=data.token;$('send').disabled=false}else if(data.approved){$('result').insertAdjacentHTML('beforeend','<p><small>Validação aprovada. O envio por e-mail está desativado nesta demonstração.</small></p>')}}catch(e){if(submittedRevision===revision){$('result').className='result bad';$('result').textContent='Erro: '+e.message}}finally{btn.disabled=false;btn.textContent='Validar documento'}});
 $('send').addEventListener('click',async()=>{if(!token)return;let current=token;token=null;$('send').disabled=true;$('result').textContent='Solicitando envio ao servidor...';try{let res=await fetch('/api/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:current})});let data=await res.json();if(!res.ok)throw Error(data.detail||'Envio não confirmado');$('result').className='result ok';$('result').textContent=data.message}catch(e){$('result').className='result bad';$('result').textContent='Envio não confirmado: '+e.message+'. Valide novamente antes de nova tentativa.'}});
+
+// Processamento por empresa, uma requisição por subpasta, sem enviar documentos.
+const individualTab=$('individualTab'),batchTab=$('batchTab');
+let companies=[],batchRevision=0,companySequence=0;
+function switchMode(mode){
+ let batch=mode==='batch'; $('individualPane').classList.toggle('hidden',batch);$('batchPane').classList.toggle('hidden',!batch);
+ individualTab.classList.toggle('selected',!batch);batchTab.classList.toggle('selected',batch);
+}
+individualTab.onclick=()=>switchMode('individual');batchTab.onclick=()=>switchMode('batch');
+function invalidateBatch(){batchRevision++;$('sendBatch').disabled=true;$('batchSummary').className='result';$('batchSummary').replaceChildren();}
+function addCompany(name='',files=[]){
+ const id=++companySequence; const card=document.createElement('div');card.className='batch-company';card.dataset.companyId=String(id);
+ const head=document.createElement('div');head.className='batch-head';const title=document.createElement('h3');title.textContent=name||('Empresa '+id);head.append(title);
+ const remove=document.createElement('button');remove.type='button';remove.className='secondary';remove.textContent='Remover';head.append(remove);card.append(head);
+ const label=document.createElement('label');label.textContent='E-mail autorizado da empresa';card.append(label);
+ const mail=document.createElement('input');mail.type='email';mail.placeholder='email@empresa.com.br';mail.autocomplete='off';card.append(mail);
+ const fileLabel=document.createElement('label');fileLabel.textContent='Documentos PDF';card.append(fileLabel);
+ const input=document.createElement('input');input.type='file';input.multiple=true;input.accept='.pdf,application/pdf';card.append(input);
+ const picked=document.createElement('div');picked.className='tiny';picked.style.marginTop='8px';card.append(picked);
+ const output=document.createElement('div');output.className='batch-result hidden';output.setAttribute('role','status');card.append(output);
+ const company={id,name,card,mail,input,files:[...files],output,picked};companies.push(company);$('batchCompanies').append(card);
+ const showFiles=()=>{picked.textContent=company.files.length+' PDF(s) selecionado(s): '+company.files.map(f=>f.name).join(', ')};
+ input.onchange=()=>{company.files=[...input.files];output.className='batch-result hidden';showFiles();invalidateBatch()};
+ mail.oninput=()=>{output.className='batch-result hidden';invalidateBatch()};
+ remove.onclick=()=>{companies=companies.filter(c=>c.id!==id);card.remove();invalidateBatch()};
+ showFiles();invalidateBatch();return company;
+}
+$('addCompany').onclick=()=>addCompany();
+$('folderButton').onclick=()=>$('folderInput').click();
+$('folderInput').onchange=()=>{
+ const list=[...$('folderInput').files].filter(f=>f.name.toLowerCase().endsWith('.pdf'));
+ const groups=new Map();
+ for(const f of list){const parts=(f.webkitRelativePath||f.name).split('/');
+  // Pastas com documentos diretamente na raiz formam um grupo separado.
+  const folder=parts.length>2?parts.slice(1,-1).join(' / '):'(arquivos na raiz)';
+  if(!groups.has(folder))groups.set(folder,[]);groups.get(folder).push(f);
+ }
+ for(const [folder,files] of groups)addCompany(folder,files);
+ $('folderInput').value='';switchMode('batch');
+};
+function formatResult(result){
+ let html=`<strong>${result.approved?'✓ Empresa aprovada':'✕ Empresa bloqueada'}</strong>`;
+ html+=`<p>CNPJ: ${escapeHtml(result.cnpj||'Não identificado')} • Competência: ${escapeHtml(result.competence||'Não identificada')}</p>`;
+ if(result.reasons?.length)html+=`<ul>${result.reasons.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')}</ul>`;
+ html+='<ul>'+(result.documents||[]).map(x=>'<li>'+escapeHtml(x.filename)+' — '+escapeHtml(x.type_label||'Não identificado')+(x.reasons.length?' — '+escapeHtml(x.reasons.join('; ')):'')+'</li>').join('')+'</ul>';
+ return html;
+}
+$('validateBatch').onclick=async()=>{
+ invalidateBatch();const revision=batchRevision;const button=$('validateBatch');button.disabled=true;
+ let approved=0,blocked=0,run=0;const all=[...companies];
+ try{
+  for(const company of all){
+   if(revision!==batchRevision)return;
+   company.output.className='batch-result';company.output.textContent='Validando...';
+   if(!company.mail.value.trim()||company.files.length<1){company.output.className='batch-result bad';company.output.textContent='Informe e-mail e selecione pelo menos um PDF.';blocked++;continue}
+   const totalBytes=company.files.reduce((acc,f)=>acc+f.size,0);
+   if(company.files.length>12||totalBytes>4_000_000){company.output.className='batch-result bad';company.output.textContent='Limite por empresa: até 12 PDFs e 4 MB no total. Divida o conjunto para testar.';blocked++;continue}
+   try{
+    let data=new FormData();data.append('email',company.mail.value.trim());for(const file of company.files)data.append('documents',file,file.name);
+    let response=await fetch('/api/batch/validate-company',{method:'POST',body:data});let result=await response.json();
+    if(revision!==batchRevision)return;
+    if(!response.ok)throw new Error(typeof result.detail==='string'?result.detail:'Falha na validação.');
+    company.output.innerHTML=formatResult(result);company.output.className='batch-result '+(result.approved?'ok':'bad');
+    if(result.approved)approved++;else blocked++;
+   }catch(e){if(revision!==batchRevision)return;company.output.textContent='Erro: '+e.message;company.output.className='batch-result bad';blocked++}
+   run++;button.textContent=`Validando ${run}/${all.length}...`;
+  }
+  if(revision===batchRevision){$('batchSummary').className='result '+(blocked?'bad':'ok');
+   $('batchSummary').textContent=`Resultado: ${approved} empresa(s) aprovada(s), ${blocked} bloqueada(s). Nenhum e-mail foi enviado. O envio em lote permanece indisponível nesta versão de testes.`;
+  }
+ }finally{button.disabled=false;button.textContent='Validar lote'}
+};
+addCompany();
 </script></body></html>
